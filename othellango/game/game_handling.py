@@ -2,17 +2,18 @@
 import copy
 import math
 
-# testBoard = [[-1 for i in range(0, 8)] for j in range(3)]
+testBoard = [[-1 for i in range(0, 8)] for j in range(3)]
+testBoard.append([1, -1, -1, 0, 1, -1, -1, -1])
+testBoard.append([-1, -1, -1, 1, 0, -1, -1, -1])
+testBoard += [[-1 for i in range(0, 8)] for j in range(3)]
+
+# testBoard = []
+# testBoard.append([-1, -1, -1, 0, 1, -1, -1, -1])
+# testBoard += [[-1 for i in range(0, 8)] for j in range(2)]
 # testBoard.append([-1, -1, -1, 0, 1, -1, -1, -1])
 # testBoard.append([-1, -1, -1, 1, 0, -1, -1, -1])
-# testBoard += [[-1 for i in range(0, 8)] for j in range(3)]
-testBoard = []
-testBoard.append([-1, -1, -1, 0, 1, -1, -1, -1])
-testBoard += [[-1 for i in range(0, 8)] for j in range(2)]
-testBoard.append([-1, -1, -1, 0, 1, -1, -1, -1])
-testBoard.append([-1, -1, -1, 1, 0, -1, -1, -1])
-testBoard += [[-1 for i in range(0, 8)] for j in range(2)]
-testBoard.append([1, -1, -1, 1, 0, -1, -1, -1])
+# testBoard += [[-1 for i in range(0, 8)] for j in range(2)]
+# testBoard.append([1, -1, -1, 1, 0, -1, -1, -1])
 
 emojiLookupDict = {
 	'🟩': -1,
@@ -88,16 +89,18 @@ def checkLinesFromPoint(board: list, pointCoords: tuple, lineModY: int, lineModX
 			break
 		yForPlacement += lineModY
 		xForPlacement += lineModX
+		displayBoard(newBoard)
 	
 	return newBoard
 
-def merge_boards(boardList: list) -> list:
+def merge_boards(boardList: list, discPreference: int) -> list:
 	newBoard = [[-1 for i in range(0, 8)] for j in range(8)]
 	for board in boardList:
 		for y in range(0, len(board)):
 			for x in range(0, len(board[y])):
 				if board[y][x] != -1:
-					newBoard[y][x] = board[y][x]
+					if board[y][x] == discPreference or newBoard[y][x] == -1:
+						newBoard[y][x] = board[y][x]
 
 	return newBoard
 
@@ -115,9 +118,8 @@ def checkBoard(board: list, playerBeingChecker: int) -> list:
 					if yMod == 0 and xMod == 0:
 						continue
 					newBoardList.append(checkLinesFromPoint(board, (x, y), yMod, xMod, playerBeingChecker))
-					displayBoard(board)
 	
-	return merge_boards(newBoardList)
+	return merge_boards(newBoardList, playerBeingChecker)
 
 
 displayBoard(testBoard)
