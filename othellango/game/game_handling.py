@@ -121,6 +121,9 @@ def checkBoard(board: list, playerBeingChecker: int) -> list:
 	
 	return merge_boards(newBoardList, playerBeingChecker)
 
+def addPossibleMoves(board: list) -> list:
+	pass
+
 
 displayBoard(testBoard)
 displayBoard(checkBoard(testBoard, 1))
