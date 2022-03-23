@@ -89,7 +89,7 @@ def checkLinesFromPoint(board: list, pointCoords: tuple, lineModY: int, lineModX
 			break
 		yForPlacement += lineModY
 		xForPlacement += lineModX
-		displayBoard(newBoard)
+		# displayBoard(newBoard)
 	
 	return newBoard
 
@@ -121,9 +121,88 @@ def checkBoard(board: list, playerBeingChecker: int) -> list:
 	
 	return merge_boards(newBoardList, playerBeingChecker)
 
-def addPossibleMoves(board: list) -> list:
-	pass
+def linearPossibleMoveCheck(board: list, pointCoords: tuple, yLineMod: int, xLineMod: int, playerToMove: int, representativeInt: int) -> list:
+	print(pointCoords, yLineMod, xLineMod)
+	checkingX = pointCoords[0]
+	checkingY = pointCoords[1]
+
+	newBoard = copy.deepcopy(board)
+
+	opposition = not playerToMove
+	coveredOpposition = False
+
+	runY = True
+
+	while checkingY >= 0 and checkingY < len(board) and runY is True:
+		ranX = False
+		runX = True
+		while checkingX >= 0 and checkingX < len(board) and runX is True:
+			
+			if not (checkingY >= 0 and checkingY < len(board)):
+				break
+			ranX = True
+			
+			checkBoard = copy.deepcopy(board)
+			checkBoard[checkingY][checkingX] = 'TEST'
+			displayBoard(checkBoard)
+
+			if board[checkingY][checkingX] == opposition:
+				coveredOpposition = True
+			elif board[checkingY][checkingX] == -1:
+				if coveredOpposition == True:
+					newBoard[checkingY][checkingX] = representativeInt
+					return newBoard
+
+			checkingX += xLineMod
+			checkingY += yLineMod
+
+			if xLineMod == 0:
+				runX = False
+		
+		if ranX is not True:
+			checkingY += xLineMod
+
+		if yLineMod == 0:
+			runY = False
+	
+	
+	# linesWithInfo = [{
+	# 	'end': lineEnd,
+	# 	'length': math.sqrt((lineEnd[0]-pointCoords[0])**2+(lineEnd[1]-pointCoords[1])**2)
+	# } for lineEnd in lines]
+
+	# sortedLinesWithInfo = sorted(linesWithInfo, key=lambda k : k['length'])
+
+	# yForPlacement = pointCoords[1]
+	# xForPlacement = pointCoords[0]
+	# newBoard = copy.deepcopy(board)
+	# while True:
+	# 	if (xForPlacement, yForPlacement) == sortedLinesWithInfo[-1]['end']:
+	# 		board[yForPlacement][xForPlacement]
+	# 		break
+	# 	yForPlacement += yLineMod
+	# 	xForPlacement += xLineMod
+	
+	return newBoard
+
+def addPossibleMoves(board: list, playerToMove: int, representativeInt: int=-2) -> list:
+	newBoardList = []
+
+	for y in range(0, len(board)):
+		for x in range(0, len(board[y])):
+			if board[y][x] != playerToMove:
+				continue
+			
+			for yMod in range(-1, 2):
+				for xMod in range(-1, 2):
+					if yMod == 0 and xMod == 0:
+						continue 
+					newBoardList.append(linearPossibleMoveCheck(board, (x, y), yMod, xMod, playerToMove, representativeInt))
+	
+	return merge_boards(newBoardList, representativeInt)
 
 
 displayBoard(testBoard)
-displayBoard(checkBoard(testBoard, 1))
+
+testBoard = checkBoard(testBoard, 1)
+displayBoard(addPossibleMoves(testBoard, 0))
