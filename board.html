@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script>
+		window.onload = function() {
+			var cellHeight = window.innerHeight / 8
+			var table = document.createElement('table')
+			table.style.borderSpacing = '0px'			
+			document.getElementsByClassName('board-inner-container')[0].appendChild(table)
+			for (var i=0; i<8; i++){
+				var Row = document.createElement('tr')
+				table.appendChild(Row)
+				for (var j=0; j<8; j++){
+					var cell = document.createElement('div')
+					//cell.style.position = 'relative'
+					//cell.style.top = (j*cellHeight) + 'px'
+					//cell.style.left = (i*cellHeight) + 'px'
+					cell.style.width = cellHeight - 2 + 'px'
+					cell.style.height = cellHeight - 2 + 'px'
+					cell.style.border = '1px solid #1a1a1a'
+					cell.style.backgroundColor = '#3d8f1f'
+					cell.id = i*8+j+1
+					$(cell).addClass('unoccupied')
+					$(cell).addClass('board-places')
+					
+					var td = document.createElement('td')
+					td.style.padding = '0px'
+					td.style.margin = '0px'
+					td.id = 'td-' + i*8+j+1
+					td.appendChild(cell)
+					Row.appendChild(td)				
+					
+					var circle = document.createElement('div')
+					circle.style.width = '100%'
+					circle.style.height = '100%'
+					circle.style.backgroundColor = 'black'
+    				circle.style.margin = '0 auto';
+					circle.style.borderRadius = "50%";
+					circle.style.display = 'none';
+					circle.style.pointerEvents = 'none';
+
+					cell.appendChild(circle)
+
+				}
+			}
+			
+		}
+
+		$(function() {
+			$('#board').css({
+				display: 'none'
+			})
+
+			$('#board').delay(500).fadeIn(500);
+
+			$('.board-places').click(function() {
+				let placeId = '#' + $(this).attr('id')
+				console.log(placeId)
+
+				if ($(placeId).hasClass('unoccupied')){
+					$(placeId).removeClass('unoccupied')
+					$(placeId).addClass('occupied')
+					$(placeId).children().fadeIn(500)
+
+				}
+				else{
+					$(placeId).removeClass('occupied')
+					$(placeId).addClass('unoccupied')
+					$(placeId).children().fadeOut(500)
+				}
+
+				/*$(placeId).css({
+					backgroundColor: '#FFFFFF'
+				})*/
+
+			})
+
+		});
+	</script>
+</head>
+<body>
+
+<div id='board' class="board-container">
+	
+	<div class="board-inner-container">
+
+	</div>
+
+</div>
+
+</body>
+	<style>
+		.board-container {
+			text-align: center;
+		}
+		.board-inner-container {
+			display: inline-block;
+		}
+
+		html, body {margin: 0; height: 100%; overflow: hidden}
+	</style>
+</html>
