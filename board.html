@@ -25,7 +25,6 @@
 					cell.style.border = '1px solid #1a1a1a'
 					cell.style.backgroundColor = '#3d8f1f'
 					cell.id = i*8+j+1
-					$(cell).addClass('unoccupied')
 					$(cell).addClass('board-places')
 					
 					var td = document.createElement('td')
@@ -39,10 +38,22 @@
 					circle.style.width = '100%'
 					circle.style.height = '100%'
 					circle.style.backgroundColor = 'black'
-    				circle.style.margin = '0 auto';
+					circle.style.margin = '0 auto';
 					circle.style.borderRadius = "50%";
-					circle.style.display = 'none';
+					if (i*8+j+1 === 29 || i*8+j+1 === 36){
+						$(cell).addClass('occupied')
+					}
+					else if (i*8+j+1 === 28 || i*8+j+1 === 37){
+						$(cell).addClass('occupied')
+						circle.style.backgroundColor = 'white'
+					}
+					else {
+						$(cell).addClass('unoccupied')
+						circle.style.display = 'none';
+					}
 					circle.style.pointerEvents = 'none';
+
+
 
 					cell.appendChild(circle)
 
