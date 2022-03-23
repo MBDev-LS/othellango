@@ -9,17 +9,15 @@ from . import game_handling
 def game_index(request):
 	return render(request, 'game/game_index.html')
 
-def disk_moved(request):
+def disc_moved(request):
 	if request.method != 'POST':
 		return HttpResponse(status=405)
 	
 	request.POST.get("title", "")
-	
 
+	# Placeholder.
 	responseData = {
-        'next': 4,
-        'name': 'Test Response',
-        'roles' : ['Admin', 'User']
+        'new_board': [[-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 0, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1]],
     }
 
 	return JsonResponse(responseData)
