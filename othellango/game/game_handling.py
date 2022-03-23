@@ -4,7 +4,7 @@ import math
 from random import randint
 
 testBoard = [[-1 for i in range(0, 8)] for j in range(3)]
-testBoard.append([1, -1, -1, 0, 1, -1, -1, -1])
+testBoard.append([1, -2, 1, 0, 1, -1, -1, -1])
 testBoard.append([-1, -1, -1, 1, 0, -1, -1, -1])
 testBoard += [[-1 for i in range(0, 8)] for j in range(3)]
 
@@ -42,7 +42,7 @@ def displayBoard(board: list) -> None:
 	print(outputString)
 
 def checkLinesFromPoint(board: list, pointCoords: tuple, lineModY: int, lineModX: int, playerBeingChecker: int):
-	# print(pointCoords, lineModY, lineModX)
+	
 	checkingX = pointCoords[0]
 	checkingY = pointCoords[1]
 
@@ -54,9 +54,7 @@ def checkLinesFromPoint(board: list, pointCoords: tuple, lineModY: int, lineModX
 			if not (checkingY >= 0 and checkingY < len(board)):
 				break
 			ranX = True
-			checkBoard = copy.deepcopy(board)
-			checkBoard[checkingY][checkingX] = 'TEST'
-			# displayBoard(checkBoard)
+			
 			if board[checkingY][checkingX] == playerBeingChecker:
 				if (checkingX, checkingY) != pointCoords:
 					lines.append((checkingX, checkingY))
@@ -92,7 +90,6 @@ def checkLinesFromPoint(board: list, pointCoords: tuple, lineModY: int, lineModX
 			break
 		yForPlacement += lineModY
 		xForPlacement += lineModX
-		# displayBoard(newBoard)
 	
 	return newBoard
 
@@ -150,7 +147,7 @@ def linearPossibleMoveCheck(board: list, pointCoords: tuple, yLineMod: int, xLin
 			
 			checkBoard = copy.deepcopy(board)
 			checkBoard[checkingY][checkingX] = 'TEST'
-			displayBoard(checkBoard)
+			# displayBoard(checkBoard)
 
 			if board[checkingY][checkingX] == opposition:
 				coveredOpposition = True
@@ -221,8 +218,12 @@ def checkForWin(board: list) -> int:
 displayBoard(testBoard)
 
 testBoard = checkBoard(testBoard, 1)
-displayBoard(addPossibleMoves(testBoard, 1))
-testBoard = [[0 for i in range(0, 8)] for j in range(4)]
-testBoard += [[1 for i in range(0, 8)] for j in range(4)]
+print(testBoard)
 displayBoard(testBoard)
-print(checkForWin(testBoard))
+
+
+# displayBoard(addPossibleMoves(testBoard, 1))
+# testBoard = [[0 for i in range(0, 8)] for j in range(4)]
+# testBoard += [[1 for i in range(0, 8)] for j in range(4)]
+# displayBoard(testBoard)
+# print(checkForWin(testBoard))
