@@ -170,7 +170,8 @@
 
 				var win = false;
 				/*while (win === false){
-					
+					console.log("Welcome to the game.")
+
 				}*/
 
 				let board = createBoard()
@@ -205,6 +206,7 @@
 					$(placeId).addClass('occupied')
 					$(placeId).find(finder).css({
 						opacity: '100%',
+						display: 'initial',
 						backgroundColor: currentColour
 					})
 					if (currentColour === 'black'){
@@ -216,6 +218,7 @@
 					$(placeId).find('.circle-outline').css({
 						display: 'none'
 					})
+
 
 				}
 				/*else{
