@@ -258,7 +258,10 @@
 
 					$.post("/movedisc", postDict,
 					function (data, textStatus, jqXHR) {
-						board = data['board']
+						console.log(data)
+						board = data['new_board']
+						console.log(board)
+						// drawBoard(board)
 					},
 					"json"
 					);
