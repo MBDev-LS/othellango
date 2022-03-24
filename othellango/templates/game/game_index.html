@@ -59,13 +59,10 @@
 					let cellId = y*8+x+1
 
 					let cell = $(`#${cellId}`)
-					console.log(cell)
 
-					console.log(cell.find('circle'))
-
-
+					console.log('\n',cell)
 					if (boardList[y][x] === -1) {
-						console.log('ITS CLEAR')
+						console.log('ITS CLEAR', cellId)
 						$(`#${cellId}`).find('.circle').css({display: 'none'})
 						$(`#${cellId}`).find('.circle-outline').css({display: 'none'})
 						$(`#${cellId}`).removeClass('occupied')
@@ -92,6 +89,7 @@
 						$(`#${cellId}`).removeClass('unoccupied')
 						$(`#${cellId}`).addClass('occupied')
 					}
+					console.log(cell)
 				}	
 			}
 		
@@ -176,6 +174,7 @@
 		$(function() {
 
 			drawBoard(board)
+			console.log('DREW BOARD', board)
 
 			let blackWhiteDict = {
 				0: 'white',
@@ -188,6 +187,7 @@
 			})
 
 			$('#playButton').click(function() {
+				drawBoard(board)
 				$('#playButton').css({
 					visibility: 'hidden'
 				})
@@ -205,7 +205,7 @@
 
 			$('.board-places').mouseenter(function() {
 				if ($(this).find('.circle-outline')[0].style.display !== 'none'){
-					console.log(currentPlayer)
+					{% comment %} console.log(currentPlayer) {% endcomment %}
 					$(this).find('.circle').css({
 						
 						backgroundColor: blackWhiteDict[currentPlayer],
@@ -223,13 +223,13 @@
 
 			$('.board-places').click(function() {
 				let placeId = '#' + $(this).attr('id')
-				console.log(placeId)
+				// console.log(placeId)
 				
 				let intPos = parseInt($(this).attr('id'));
 				x = (intPos - 1) % 8
 				y = Math.floor(intPos/8);
-				console.log(y, x)
-				console.log(board[y][x])
+				// console.log(y, x)
+				// console.log(board[y][x])
 
 				if (board[y][x] === -2){
 					$(placeId).removeClass('unoccupied')
@@ -258,7 +258,8 @@
 					let postDict = {
 						csrfmiddlewaretoken: getCookie('csrftoken'),
 						board: JSON.stringify(board),
-						lastPlayer: currentPlayer
+						lastPlayer: currentPlayer, 
+						lastPlacedCoords: JSON.stringify([x, y])
 					}
 
 					$.post("/movedisc", postDict,

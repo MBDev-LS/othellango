@@ -23,7 +23,7 @@ def disc_moved(request):
 		board = json.loads(request.POST.get("board"))
 	except:
 		return HttpResponse(422)
-	lastPlayer = request.POST.get("lastPlayer") # validate these
+	lastPlayer = request.POST.get("lastPlayer")
 
 	if lastPlayer in [0, 1]:
 		return HttpResponse(422)
@@ -31,11 +31,17 @@ def disc_moved(request):
 	lastPlayer = int(lastPlayer)
 	
 	nextPlayer = int(not lastPlayer)
+
+	try:
+		lastPlacedCoords = json.loads(request.POST.get("lastPlacedCoords"))
+	except:
+		return HttpResponse(422)
+
 	pprint(board)
 	print(lastPlayer, nextPlayer)
 
 	game_handling.displayBoard(board)
-	board = game_handling.checkBoard(board, lastPlayer)
+	board = game_handling.checkBoard(board, lastPlayer, lastPlacedCoords)
 	game_handling.displayBoard(board)
 	board = game_handling.addPossibleMoves(board, nextPlayer)
 	game_handling.displayBoard(board)

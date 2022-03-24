@@ -108,22 +108,18 @@ def merge_boards(boardList: list, discPreference: int) -> list:
 	return newBoard
 
 
-def checkBoard(board: list, playerBeingChecker: int) -> list:
+def checkBoard(board: list, playerBeingChecker: int, lastPlacedCoords) -> list:
 	"""
 	Takes in board, returns board with flips made.
 	"""
 	newBoardList = []
 
-	for y in range(0, len(board)):
-		for x in range(0, len(board[y])):
-			if board[y][x] != playerBeingChecker:
+
+	for yMod in range(-1, 2):
+		for xMod in range(-1, 2):
+			if yMod == 0 and xMod == 0:
 				continue
-			
-			for yMod in range(-1, 2):
-				for xMod in range(-1, 2):
-					if yMod == 0 and xMod == 0:
-						continue
-					newBoardList.append(checkLinesFromPoint(board, (x, y), yMod, xMod, playerBeingChecker))
+			newBoardList.append(checkLinesFromPoint(board, lastPlacedCoords, yMod, xMod, playerBeingChecker))
 	
 	return merge_boards(newBoardList, playerBeingChecker) if len(newBoardList) > 0 else board
 
