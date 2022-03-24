@@ -14,12 +14,18 @@ def disc_moved(request):
 		return HttpResponse(status=405)
 	
 	board = request.POST.get("board")
-	lastPlayer = request.POST.get("lastPlayer")
+	lastPlayer = request.POST.get("lastPlayer") # validate these
+	nextPlayer = int(not lastPlayer)
+	print(board, lastPlayer, nextPlayer)
+	
+	board = game_handling.checkBoard(board, lastPlayer)
+	board = game_handling.addPossibleMoves(board, nextPlayer)
+	winner = game_handling.checkForWin(board)
 
 	# Placeholder.
 	responseData = {
-		'winner': 1,
-        'new_board': [[-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 0, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1]],
+		'winner': winner,
+        'new_board': board,
     }
 
 	return JsonResponse(responseData)

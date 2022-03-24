@@ -30,8 +30,12 @@
 			}
 			return cookieValue;
 		}
-
-		$.post("/movedisc", {"csrfmiddlewaretoken": getCookie('csrftoken')},
+		let postDict = {
+			csrfmiddlewaretoken: getCookie('csrftoken'),
+			board: "[[-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [1, -2, 1, 0, 1, -1, -1, -1], [-1, -1, -1, 1, 0, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1]]",
+			lastPlayer: 1
+		}
+		$.post("/movedisc", postDict,
         function (data, textStatus, jqXHR) {
 			console.log(data)
         },
