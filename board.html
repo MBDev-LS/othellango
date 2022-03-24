@@ -180,14 +180,31 @@
 
 			let finder = '.circle';
 
+			$('.board-places').mouseenter(function() {
+				if ($(this).find('.circle-outline')[0].style.display !== 'none'){
+					$(this).find('.circle').css({
+						backgroundColor: currentColour,
+						opacity: '50%',
+						display: 'initial'
+					})
+				}
+			})
+
+			$('.board-places').mouseleave(function() {
+				if ($(this).find('.circle-outline')[0].style.display !== 'none'){
+					$(this).find('.circle').fadeOut(150)
+				}
+			})
+
 			$('.board-places').click(function() {
 				let placeId = '#' + $(this).attr('id')
 				console.log(placeId)
 
-				if ($(placeId).hasClass('unoccupied')){
+				if ($(placeId).hasClass('unoccupied') && $(placeId).find('.circle-outline')[0].style.display !== 'none'){
 					$(placeId).removeClass('unoccupied')
 					$(placeId).addClass('occupied')
 					$(placeId).find(finder).css({
+						opacity: '100%',
 						backgroundColor: currentColour
 					})
 					if (currentColour === 'black'){
@@ -196,18 +213,16 @@
 					else{
 						currentColour = 'black'
 					}
-					$(placeId).find(finder).fadeIn(250, function() {
-						$(placeId).find('.circle-outline').css({
-							display: 'none'
-						})
+					$(placeId).find('.circle-outline').css({
+						display: 'none'
 					})
 
 				}
-				else{
+				/*else{
 					$(placeId).removeClass('occupied')
 					$(placeId).addClass('unoccupied')
 					$(placeId).find(finder).fadeOut(500)
-				}
+				}*/
 
 				/*$(placeId).css({
 					backgroundColor: '#FFFFFF'
