@@ -13,7 +13,8 @@ def disc_moved(request):
 	if request.method != 'POST':
 		return HttpResponse(status=405)
 	
-	request.POST.get("title", "")
+	board = request.POST.get("board")
+	lastPlayer = request.POST.get("lastPlayer")
 
 	# Placeholder.
 	responseData = {
