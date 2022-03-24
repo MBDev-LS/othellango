@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script>
+		function createBoard() {
+			let board = []
+
+			for (let i = 0; i < 8; i++) {
+				let newRow = []
+				for (let r = 0; r < 8; r++) {
+					newRow.push(-1)
+				}
+				board.push(newRow)
+			}
+
+			board[3][3] = 0
+			board[3][4] = 1
+
+			board[4][3] = 1
+			board[4][4] = 0
+
+			board[3][2] = -2
+			board[2][3] = -2
+
+			board[5][4] = -2
+			board[4][5] = -2
+
+			return board
+
+		}
+
+		function drawBoard(boardList) {
+			for (let y = 0; y < boardList.length; y++) {
+				for (let x = 0; x < boardList[y].length; x++) {
+					let cellId = y*8+x+1
+
+					let cell = $(`#${cellId}`)
+					console.log(cell)
+
+					console.log(cell.find('circle'))
+
+
+					if (boardList[y][x] === -1) {
+						console.log('ITS CLEAR')
+						$(`#${cellId}`).find('.circle').css({display: 'none'})
+						$(`#${cellId}`).find('.circle-outline').css({display: 'none'})
+						$(`#${cellId}`).removeClass('occupied')
+						$(`#${cellId}`).addClass('unoccupied')
+
+					} else if (boardList[y][x] === -2) {
+						console.log('ITS POSSIBLE')
+						$(`#${cellId}`).find('.circle').css({display: 'none'})
+						$(`#${cellId}`).find('.circle-outline').css({display: 'initial'})
+						$(`#${cellId}`).removeClass('occupied')
+						$(`#${cellId}`).addClass('unoccupied')
+					} else if (boardList[y][x] === 0) {
+						console.log('ITS WHITE')
+						$(`#${cellId}`).find('.circle').css({backgroundColor: 'white'})
+						$(`#${cellId}`).find('.circle').css({display: 'initial'})
+						$(`#${cellId}`).find('.circle-outline').css({display: 'none'})
+						$(`#${cellId}`).removeClass('unoccupied')
+						$(`#${cellId}`).addClass('occupied')
+					} else if (boardList[y][x] === 1) {
+						console.log('ITS BLACK')
+						$(`#${cellId}`).find('.circle').css({backgroundColor: 'black'})
+						$(`#${cellId}`).find('.circle').css({display: 'initial'})
+						$(`#${cellId}`).find('.circle-outline').css({display: 'none'})
+						$(`#${cellId}`).removeClass('unoccupied')
+						$(`#${cellId}`).addClass('occupied')
+					}
+				}	
+			}
+		
+		}
+
+		
+
+		
+		window.onload = function() {
+			var cellHeight = window.innerHeight / 8
+			var table = document.createElement('table')
+			// let board = [];
+			table.style.borderSpacing = '0px'			
+			document.getElementsByClassName('board-inner-container')[0].appendChild(table)
+			for (var i=0; i<8; i++){
+				var Row = document.createElement('tr')
+				table.appendChild(Row)
+				// let newRow = []
+				for (var j=0; j<8; j++){
+					var cell = document.createElement('div')
+					//cell.style.position = 'relative'
+					//cell.style.top = (j*cellHeight) + 'px'
+					//cell.style.left = (i*cellHeight) + 'px'
+					cell.style.width = cellHeight - 2 + 'px'
+					cell.style.height = cellHeight - 2 + 'px'
+					cell.style.border = '1px solid #1a1a1a'
+					cell.style.backgroundColor = '#3d8f1f'
+					cell.style.display = 'grid'
+					cell.id = i*8+j+1
+					$(cell).addClass('board-places')
+					
+					var td = document.createElement('td')
+					td.style.padding = '0px'
+					td.style.margin = '0px'
+					td.id = 'td-' + i*8+j+1
+					td.appendChild(cell)
+					Row.appendChild(td)				
+
+					var circle = document.createElement('div')
+					$(circle).addClass('circle')
+					circle.style.gridColumn = 1
+					circle.style.gridRow = 1
+					circle.style.width = '100%'
+					circle.style.height = '100%'
+					circle.style.backgroundColor = 'black'
+					circle.style.borderRadius = "50%";
+				
+					$(cell).addClass('unoccupied')
+
+					var circleOutline = document.createElement('div') 
+					$(circleOutline).addClass('circle-outline')
+					circleOutline.style.gridColumn = 1
+					circleOutline.style.gridRow = 1
+					circleOutline.style.width = '100% - 2px'
+					circleOutline.style.height = '100% - 2px'
+					circleOutline.style.borderRadius = "50%"
+					circleOutline.style.opacity = '50%'
+					circleOutline.style.border = '2px solid black'
+					circleOutline.style.pointerEvents = 'none';
+					circleOutline.style.display = 'none'
+
+					cell.appendChild(circleOutline)
+
+					// newRow.push(-1)
+					circle.style.display = 'none';
+					
+					circle.style.pointerEvents = 'none';
+
+
+
+					cell.appendChild(circle)
+
+				}
+				// board.push(newRow)
+			}
+			console.log(board)
+
+		
+
+		}
+
+		$(function() {
+
+			var currentColour = 'black'
+
+			$('#board').css({
+				display: 'none'
+			})
+
+			$('#playButton').click(function() {
+				$('#playButton').css({
+					visibility: 'hidden'
+				})
+				$('#board').delay(500).fadeIn(500);
+
+				var win = false;
+				/*while (win === false){
+					console.log("Welcome to the game.")
+
+				}*/
+
+				let board = createBoard()
+				drawBoard(board)
+
+			})
+
+			let finder = '.circle';
+
+			$('.board-places').mouseenter(function() {
+				if ($(this).find('.circle-outline')[0].style.display !== 'none'){
+					$(this).find('.circle').css({
+						backgroundColor: currentColour,
+						opacity: '50%',
+						display: 'initial'
+					})
+				}
+			})
+
+			$('.board-places').mouseleave(function() {
+				if ($(this).find('.circle-outline')[0].style.display !== 'none'){
+					$(this).find('.circle').fadeOut(150)
+				}
+			})
+
+			$('.board-places').click(function() {
+				let placeId = '#' + $(this).attr('id')
+				console.log(placeId)
+
+				if ($(placeId).hasClass('unoccupied') && $(placeId).find('.circle-outline')[0].style.display !== 'none'){
+					$(placeId).removeClass('unoccupied')
+					$(placeId).addClass('occupied')
+					$(placeId).find(finder).css({
+						opacity: '100%',
+						display: 'initial',
+						backgroundColor: currentColour
+					})
+					if (currentColour === 'black'){
+						currentColour = 'white'
+					}
+					else{
+						currentColour = 'black'
+					}
+					$(placeId).find('.circle-outline').css({
+						display: 'none'
+					})
+
+
+				}
+				/*else{
+					$(placeId).removeClass('occupied')
+					$(placeId).addClass('unoccupied')
+					$(placeId).find(finder).fadeOut(500)
+				}*/
+
+				/*$(placeId).css({
+					backgroundColor: '#FFFFFF'
+				})*/
+
+			})
+
+		});
+	</script>
+</head>
+<body>
+
+	<button id="playButton">
+		Play
+	</button>
+
+	<div id='board' class="board-container">
+		
+		<div class="board-inner-container">
+
+		</div>
+
+	</div>
+
+</body>
+	<style>
+		.board-container {
+			text-align: center;
+		}
+		.board-inner-container {
+			display: inline-block;
+		}
+		button {
+			width: 100px;
+			height: 30px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%)
+		}
+
+		html, body {margin: 0; height: 100%; overflow: hidden}
+	</style>
+</html>
