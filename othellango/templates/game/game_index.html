@@ -181,7 +181,7 @@
 				0: 'white',
 				1: 'black'
 			}
-			let currentPlayer = 0
+			let currentPlayer = 1
 
 			$('#board').css({
 				display: 'none'
@@ -205,7 +205,9 @@
 
 			$('.board-places').mouseenter(function() {
 				if ($(this).find('.circle-outline')[0].style.display !== 'none'){
+					console.log(currentPlayer)
 					$(this).find('.circle').css({
+						
 						backgroundColor: blackWhiteDict[currentPlayer],
 						opacity: '50%',
 						display: 'initial'
@@ -238,12 +240,15 @@
 						backgroundColor: blackWhiteDict[currentPlayer]
 					})
 					if (currentPlayer === 1){
-						currentColour = 'white'
-						currentPlayer = 0
+						currentColour = blackWhiteDict[currentPlayer]
+						board[y][x] = currentPlayer
+						
 					}
 					else{
-						currentColour = 'black'
-						currentPlayer = 1
+						currentColour = blackWhiteDict[currentPlayer]
+						board[y][x] = currentPlayer
+						
+						
 					}
 					$(placeId).find('.circle-outline').css({
 						display: 'none'
@@ -253,7 +258,7 @@
 					let postDict = {
 						csrfmiddlewaretoken: getCookie('csrftoken'),
 						board: JSON.stringify(board),
-						lastPlayer: 1
+						lastPlayer: currentPlayer
 					}
 
 					$.post("/movedisc", postDict,
@@ -262,6 +267,7 @@
 						board = data['new_board']
 						console.log(board)
 						drawBoard(board)
+						if (currentPlayer === 1) { currentPlayer = 0 } else {currentPlayer = 1 }
 					},
 					"json"
 					);

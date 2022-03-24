@@ -28,12 +28,19 @@ def disc_moved(request):
 	if lastPlayer in [0, 1]:
 		return HttpResponse(422)
 	
-	nextPlayer = int(not lastPlayer)
+	lastPlayer = int(lastPlayer)
 	
+	nextPlayer = int(not lastPlayer)
+	pprint(board)
+	print(lastPlayer, nextPlayer)
 
+	game_handling.displayBoard(board)
 	board = game_handling.checkBoard(board, lastPlayer)
+	game_handling.displayBoard(board)
 	board = game_handling.addPossibleMoves(board, nextPlayer)
+	game_handling.displayBoard(board)
 	winner = game_handling.checkForWin(board)
+	
 	
 
 	# Placeholder.
@@ -41,5 +48,7 @@ def disc_moved(request):
 		'winner': winner,
         'new_board': board,
     }
+
+	pprint(responseData)
 
 	return JsonResponse(responseData)

@@ -3,6 +3,7 @@ import copy
 import math
 from random import randint
 
+"""
 testBoard = [[-1 for i in range(0, 8)] for j in range(3)]
 testBoard.append([1, -2, 1, 0, 1, -1, -1, -1])
 testBoard.append([-1, -1, -1, 1, 0, -1, -1, -1])
@@ -15,6 +16,8 @@ testBoard += [[-1 for i in range(0, 8)] for j in range(3)]
 # testBoard.append([-1, -1, -1, 1, 0, -1, -1, -1])
 # testBoard += [[-1 for i in range(0, 8)] for j in range(2)]
 # testBoard.append([1, -1, -1, 1, 0, -1, -1, -1])
+
+"""
 
 emojiLookupDict = {
 	'🟩': -1,
@@ -122,7 +125,7 @@ def checkBoard(board: list, playerBeingChecker: int) -> list:
 						continue
 					newBoardList.append(checkLinesFromPoint(board, (x, y), yMod, xMod, playerBeingChecker))
 	
-	return merge_boards(newBoardList, playerBeingChecker)
+	return merge_boards(newBoardList, playerBeingChecker) if len(newBoardList) > 0 else board
 
 def linearPossibleMoveCheck(board: list, pointCoords: tuple, yLineMod: int, xLineMod: int, playerToMove: int, representativeInt: int) -> list:
 	print(pointCoords, yLineMod, xLineMod)
@@ -214,16 +217,31 @@ def checkForWin(board: list) -> int:
 		return 1
 	
 	return -1
-
+"""
 displayBoard(testBoard)
 
 testBoard = checkBoard(testBoard, 1)
 print(testBoard)
 displayBoard(testBoard)
-
+"""
 
 # displayBoard(addPossibleMoves(testBoard, 1))
 # testBoard = [[0 for i in range(0, 8)] for j in range(4)]
 # testBoard += [[1 for i in range(0, 8)] for j in range(4)]
 # displayBoard(testBoard)
 # print(checkForWin(testBoard))
+
+tBoard = [[-1, -1, -1, -1, -1, -1, -1, -1],
+		[-1, -1, -1, -1, -1, -1, -1, -1],
+		[-1, -1, -1, -2, -1, -1, -1, -1],
+		[-1, -1, -2, 0, 1, -1, -1, -1],
+		[-1, -1, -1, 1, 0, -2, -1, -1],
+		[-1, -1, -1, -1, -2, -1, -1, -1],
+		[-1, -1, -1, -1, -1, -1, -1, -1],
+		[-1, -1, -1, -1, -1, -1, -1, -1]]
+
+# board = checkBoard(tBoard, 1)
+# displayBoard(board)
+# board = addPossibleMoves(tBoard, 0)
+# displayBoard(board)
+# winner = checkForWin(board)
