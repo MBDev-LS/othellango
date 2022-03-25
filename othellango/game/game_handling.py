@@ -1,7 +1,6 @@
 
 import copy
 import math
-from os import remove
 from random import randint
 
 """
@@ -54,7 +53,7 @@ def checkLinesFromPoint(board: list, pointCoords: tuple, lineModY: int, lineModX
 
 	while checkingY >= 0 and checkingY < len(board):
 		ranX = False
-		while checkingX >= 0 and checkingX < len(board):
+		while checkingX >= 0 and checkingX < len(board[checkingY]): # Check if (checkingY, checkingX)/[checkingY, checkingX] == pointCoords
 			if not (checkingY >= 0 and checkingY < len(board)):
 				break
 			ranX = True
@@ -64,12 +63,7 @@ def checkLinesFromPoint(board: list, pointCoords: tuple, lineModY: int, lineModX
 			displayBoard(checkBoard)
 
 			if board[checkingY][checkingX] == -1: # This broke it
-				checkingX += lineModX
-				checkingY += lineModY
-
-				if lineModX == 0:
-					break
-				continue
+				break
 			
 			if board[checkingY][checkingX] == playerBeingChecker:
 				if (checkingX, checkingY) != pointCoords:
@@ -78,13 +72,20 @@ def checkLinesFromPoint(board: list, pointCoords: tuple, lineModY: int, lineModX
 			checkingX += lineModX
 			checkingY += lineModY
 
-			if lineModX == 0:
+			if lineModX == 0 or checkingY >= len(board): # 
 				break
+			# elif checkingX >= len(board[checkingY]):
+			# 	break
 		
 		if ranX is not True:
 			checkingY += lineModY
 
-		if lineModY == 0:
+		if checkingY >= len(board):
+			break
+		elif checkingX >= len(board[checkingY]):
+			break
+
+		if lineModY == 0 or board[checkingY][checkingX] == -1:
 			break
 	
 	if len(lines) == 0:
@@ -95,14 +96,16 @@ def checkLinesFromPoint(board: list, pointCoords: tuple, lineModY: int, lineModX
 		'length': math.sqrt((lineEnd[0]-pointCoords[0])**2+(lineEnd[1]-pointCoords[1])**2)
 	} for lineEnd in lines]
 
-	sortedLinesWithInfo = sorted(linesWithInfo, key=lambda k : k['length'])
+	# sortedLinesWithInfo = sorted(linesWithInfo, key=lambda k : k['length'])
 
 	yForPlacement = pointCoords[1]
 	xForPlacement = pointCoords[0]
 	newBoard = copy.deepcopy(board)
+
+	endToUseIndex = 1 if len(linesWithInfo) > 1 else 0
 	while True:
 		newBoard[yForPlacement][xForPlacement] = playerBeingChecker
-		if (xForPlacement, yForPlacement) == sortedLinesWithInfo[-1]['end']:
+		if (xForPlacement, yForPlacement) == linesWithInfo[endToUseIndex]['end']:
 			break
 		yForPlacement += lineModY
 		xForPlacement += lineModX
@@ -154,7 +157,7 @@ def linearPossibleMoveCheck(board: list, pointCoords: tuple, yLineMod: int, xLin
 	while checkingY >= 0 and checkingY < len(board) and runY is True:
 		ranX = False
 		runX = True
-		while checkingX >= 0 and checkingX < len(board) and runX is True:
+		while checkingX >= 0 and checkingX < len(board[checkingY]) and runX is True:
 			
 			if not (checkingY >= 0 and checkingY < len(board)):
 				break
@@ -184,6 +187,16 @@ def linearPossibleMoveCheck(board: list, pointCoords: tuple, yLineMod: int, xLin
 
 			if xLineMod == 0:
 				runX = False
+
+			if checkingY >= len(board):
+				break
+			elif checkingX >= len(board[checkingY]):
+				break
+		
+		# if checkingY >= len(board):
+		# 		break
+		# elif checkingX >= len(board[checkingY]):
+		# 	break
 		
 		if ranX is not True:
 			checkingY += xLineMod
@@ -276,20 +289,19 @@ tBoard = [[-1, -1, -1, -1, -1, -1, -1, -1],
 # displayBoard(board)
 # winner = checkForWin(board)
 
-ttBoard = [[-1, -1, -1, -1, -1, -1, -1, -1],
-		[-1, -1, -1, -1, -1, -1, -1, -1],
-		[-1, -1, 1, -2, -2, 0, -1, -1],
-		[-1, -1, -1, 1, 0, -2, -1, -1],
-		[-1, -1, -2, 0, 1, 1, -1, -1],
-		[-1, -1, -1, 0, -1, -1, -1, -1],
-		[-1, -1, -2, 1, -1, -1, -1, -1],
-		[-1, -1, -1, -1, -1, -1, -1, -1]]
+# ttBoard = [[-1, -1, -1, -1, -1, -1, -1, -1],
+#  [-1, -1, -1, -2, -1, -1, -1, -1],
+#  [-1, 0, 1, 1, 1, 0, -1, -1],
+#  [-2, -1, -2, 1, 1, -1, -1, -1],
+#  [-2, 1, 1, 0, 1, 1, -2, -1],
+#  [-1, -1, 0, 1, -2, -1, -1, -1],
+#  [-1, 0, -1, 1, -1, -1, -1, -1],
+#  [-1, -1, -1, -2, -2, -1, -1, -1]]
 
-
-displayBoard(ttBoard)
-ttBoard = checkBoard(ttBoard,1, [6,3])
-displayBoard(ttBoard)
-ttBoard = removeSquareType(ttBoard, -2)
-displayBoard(ttBoard)
-ttBoard = addPossibleMoves(ttBoard, 0)
-displayBoard(ttBoard)
+# displayBoard(ttBoard)
+# ttBoard = removeSquareType(ttBoard, -2)
+# displayBoard(ttBoard)
+# ttBoard = checkBoard(ttBoard, 0, [1,2])
+# displayBoard(ttBoard)
+# ttBoard = addPossibleMoves(ttBoard, 1)
+# displayBoard(ttBoard)

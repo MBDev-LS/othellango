@@ -41,9 +41,9 @@ def disc_moved(request):
 	print(lastPlayer, nextPlayer)
 
 	game_handling.displayBoard(board)
-	board = game_handling.checkBoard(board, lastPlayer, lastPlacedCoords)
-	game_handling.displayBoard(board)
 	board = game_handling.removeSquareType(board, -2)
+	game_handling.displayBoard(board)
+	board = game_handling.checkBoard(board, lastPlayer, lastPlacedCoords)
 	game_handling.displayBoard(board)
 	board = game_handling.addPossibleMoves(board, nextPlayer)
 	game_handling.displayBoard(board)
