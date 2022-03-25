@@ -1,6 +1,7 @@
 
 import copy
 import math
+from os import remove
 from random import randint
 
 """
@@ -57,6 +58,18 @@ def checkLinesFromPoint(board: list, pointCoords: tuple, lineModY: int, lineModX
 			if not (checkingY >= 0 and checkingY < len(board)):
 				break
 			ranX = True
+
+			checkBoard = copy.deepcopy(board)
+			checkBoard[checkingY][checkingX] = 'TEST'
+			displayBoard(checkBoard)
+
+			if board[checkingY][checkingX] == -1: # This broke it
+				checkingX += lineModX
+				checkingY += lineModY
+
+				if lineModX == 0:
+					break
+				continue
 			
 			if board[checkingY][checkingX] == playerBeingChecker:
 				if (checkingX, checkingY) != pointCoords:
@@ -99,6 +112,9 @@ def checkLinesFromPoint(board: list, pointCoords: tuple, lineModY: int, lineModX
 def merge_boards(boardList: list, discPreference: int) -> list:
 	newBoard = [[-1 for i in range(0, 8)] for j in range(8)]
 	for board in boardList:
+		if board[4][4] == 1:
+			print('FOUND BLACK')
+
 		for y in range(0, len(board)):
 			for x in range(0, len(board[y])):
 				if board[y][x] != -1:
@@ -130,7 +146,7 @@ def linearPossibleMoveCheck(board: list, pointCoords: tuple, yLineMod: int, xLin
 
 	newBoard = copy.deepcopy(board)
 
-	opposition = not playerToMove
+	opposition = int(not playerToMove)
 	coveredOpposition = False
 
 	runY = True
@@ -146,13 +162,21 @@ def linearPossibleMoveCheck(board: list, pointCoords: tuple, yLineMod: int, xLin
 			
 			checkBoard = copy.deepcopy(board)
 			checkBoard[checkingY][checkingX] = 'TEST'
-			# displayBoard(checkBoard)
+			displayBoard(checkBoard)
 
+			if board[checkingY][checkingX] == playerToMove:
+				coveredOpposition = False
+			
 			if board[checkingY][checkingX] == opposition:
 				coveredOpposition = True
 			elif board[checkingY][checkingX] == -1:
+				
 				if coveredOpposition == True:
+					print('NEW')
+					displayBoard(newBoard)
 					newBoard[checkingY][checkingX] = representativeInt
+					return newBoard
+				else:
 					return newBoard
 
 			checkingX += xLineMod
@@ -213,6 +237,16 @@ def checkForWin(board: list) -> int:
 		return 1
 	
 	return -1
+
+def removeSquareType(board: list, squareTypeToRemove: int, squareTypeToReplaceWith: int=-1) -> list:
+
+	for y in range(len(board)):
+		for x in range(len(board[y])):
+			if board[y][x] == squareTypeToRemove:
+				board[y][x] = squareTypeToReplaceWith
+
+	return board
+
 """
 displayBoard(testBoard)
 
@@ -241,3 +275,21 @@ tBoard = [[-1, -1, -1, -1, -1, -1, -1, -1],
 # board = addPossibleMoves(tBoard, 0)
 # displayBoard(board)
 # winner = checkForWin(board)
+
+ttBoard = [[-1, -1, -1, -1, -1, -1, -1, -1],
+		[-1, -1, -1, -1, -1, -1, -1, -1],
+		[-1, -1, 1, -2, -2, 0, -1, -1],
+		[-1, -1, -1, 1, 0, -2, -1, -1],
+		[-1, -1, -2, 0, 1, 1, -1, -1],
+		[-1, -1, -1, 0, -1, -1, -1, -1],
+		[-1, -1, -2, 1, -1, -1, -1, -1],
+		[-1, -1, -1, -1, -1, -1, -1, -1]]
+
+
+displayBoard(ttBoard)
+ttBoard = checkBoard(ttBoard,1, [6,3])
+displayBoard(ttBoard)
+ttBoard = removeSquareType(ttBoard, -2)
+displayBoard(ttBoard)
+ttBoard = addPossibleMoves(ttBoard, 0)
+displayBoard(ttBoard)

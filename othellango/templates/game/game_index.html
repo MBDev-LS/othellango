@@ -60,36 +60,35 @@
 
 					let cell = $(`#${cellId}`)
 
-					console.log('\n',cell)
+					// console.log('\n',cell)
 					if (boardList[y][x] === -1) {
-						console.log('ITS CLEAR', cellId)
+						// console.log('ITS CLEAR', cellId)
 						$(`#${cellId}`).find('.circle').css({display: 'none'})
 						$(`#${cellId}`).find('.circle-outline').css({display: 'none'})
 						$(`#${cellId}`).removeClass('occupied')
 						$(`#${cellId}`).addClass('unoccupied')
 
 					} else if (boardList[y][x] === -2) {
-						console.log('ITS POSSIBLE')
+						// console.log('ITS POSSIBLE')
 						$(`#${cellId}`).find('.circle').css({display: 'none'})
 						$(`#${cellId}`).find('.circle-outline').css({display: 'initial'})
 						$(`#${cellId}`).removeClass('occupied')
 						$(`#${cellId}`).addClass('unoccupied')
 					} else if (boardList[y][x] === 0) {
-						console.log('ITS WHITE')
+						// console.log('ITS WHITE')
 						$(`#${cellId}`).find('.circle').css({backgroundColor: 'white'})
 						$(`#${cellId}`).find('.circle').css({display: 'initial'})
 						$(`#${cellId}`).find('.circle-outline').css({display: 'none'})
 						$(`#${cellId}`).removeClass('unoccupied')
 						$(`#${cellId}`).addClass('occupied')
 					} else if (boardList[y][x] === 1) {
-						console.log('ITS BLACK')
+						// console.log('ITS BLACK')
 						$(`#${cellId}`).find('.circle').css({backgroundColor: 'black'})
 						$(`#${cellId}`).find('.circle').css({display: 'initial'})
 						$(`#${cellId}`).find('.circle-outline').css({display: 'none'})
 						$(`#${cellId}`).removeClass('unoccupied')
 						$(`#${cellId}`).addClass('occupied')
 					}
-					console.log(cell)
 				}	
 			}
 		
@@ -165,7 +164,6 @@
 				}
 				// board.push(newRow)
 			}
-			console.log(board)
 
 		
 
@@ -174,7 +172,6 @@
 		$(function() {
 
 			drawBoard(board)
-			console.log('DREW BOARD', board)
 
 			let blackWhiteDict = {
 				0: 'white',
@@ -217,17 +214,28 @@
 
 			$('.board-places').mouseleave(function() {
 				if ($(this).find('.circle-outline')[0].style.display !== 'none'){
-					$(this).find('.circle').fadeOut(150)
+					$(this).find('.circle').fadeOut(150, function() {
+
+						$(this).css({
+							backgroundColor: 'red',
+							opacity: '1',
+							display: 'none'
+						})
+
+					})
+					
 				}
 			})
 
 			$('.board-places').click(function() {
+				console.log("Piece clicked.")
 				let placeId = '#' + $(this).attr('id')
 				// console.log(placeId)
 				
 				let intPos = parseInt($(this).attr('id'));
 				x = (intPos - 1) % 8
-				y = Math.floor(intPos/8);
+				y = Math.floor((intPos-1)/8);
+
 				// console.log(y, x)
 				// console.log(board[y][x])
 
@@ -261,6 +269,8 @@
 						lastPlayer: currentPlayer, 
 						lastPlacedCoords: JSON.stringify([x, y])
 					}
+
+					console.log(postDict)
 
 					$.post("/movedisc", postDict,
 					function (data, textStatus, jqXHR) {
